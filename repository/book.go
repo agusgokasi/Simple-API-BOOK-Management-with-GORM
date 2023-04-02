@@ -42,23 +42,23 @@ func (r Repo) GetBookById(id int64) (res model.Book, err error) {
 }
 
 func (r Repo) UpdateBook(in model.Book) (res model.Book, err error) {
-	// Find the book to delete
+	// Find the book to update
 	book := model.Book{}
 	if err := r.db.Where("id = ?", in.ID).First(&book).Error; err != nil {
 		return in, err
 	}
 
 	// Update the book
-	err = r.db.Updates(model.Book{
-		Title:       in.Title,
-		Author:      in.Author,
-		Description: in.Description,
-	}).Error
+	book.Title = in.Title
+	book.Author = in.Author
+	book.Description = in.Description
+
+	err = r.db.Save(&book).Error
 	if err != nil {
 		return res, err
 	}
 
-	res = in
+	res = book
 	return res, nil
 }
 
