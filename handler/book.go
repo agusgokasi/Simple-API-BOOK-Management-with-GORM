@@ -46,6 +46,7 @@ func (h HttpServer) CreateBook(c *gin.Context) {
 // @Produce      json
 // @Param        id   path      int  true  "Book ID"
 // @Success      200  {object}  helper.Response
+// @Failure      400  {object}  helper.Response
 // @Failure      404  {object}  helper.Response
 // @Failure      500  {object}  helper.Response
 // @Router       /books/{id} [get]
@@ -59,7 +60,7 @@ func (h HttpServer) GetBookById(c *gin.Context) {
 	// call service
 	res, err := h.app.GetBookById(id)
 	if err != nil {
-		helper.InternalServerError(c, err.Error())
+		helper.NotFound(c, err.Error())
 		return
 	}
 
@@ -73,6 +74,7 @@ func (h HttpServer) GetBookById(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Success      200  {object}  helper.Response
+// @Failure      400  {object}  helper.Response
 // @Failure      404  {object}  helper.Response
 // @Failure      500  {object}  helper.Response
 // @Router       /books [get]
@@ -96,6 +98,7 @@ func (h HttpServer) GetBooks(c *gin.Context) {
 // @Param        id   path      int  true  "Book ID"
 // @Param 		 book_request body model.BookRequest true "Book request object"
 // @Success      200  {object}  helper.Response
+// @Failure      400  {object}  helper.Response
 // @Failure      404  {object}  helper.Response
 // @Failure      500  {object}  helper.Response
 // @Router       /books/{id} [put]
@@ -116,7 +119,7 @@ func (h HttpServer) UpdateBook(c *gin.Context) {
 	// call service
 	res, err := h.app.UpdateBook(in)
 	if err != nil {
-		helper.InternalServerError(c, err.Error())
+		helper.NotFound(c, err.Error())
 		return
 	}
 
@@ -131,6 +134,7 @@ func (h HttpServer) UpdateBook(c *gin.Context) {
 // @Produce      json
 // @Param        id   path      int  true  "Book ID"
 // @Success      200  {object}  helper.Response
+// @Failure      400  {object}  helper.Response
 // @Failure      404  {object}  helper.Response
 // @Failure      500  {object}  helper.Response
 // @Router       /books/{id} [delete]
@@ -144,7 +148,7 @@ func (h HttpServer) DeleteBook(c *gin.Context) {
 	// call service
 	err = h.app.DeleteBook(id)
 	if err != nil {
-		helper.InternalServerError(c, err.Error())
+		helper.NotFound(c, err.Error())
 		return
 	}
 
