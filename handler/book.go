@@ -28,6 +28,12 @@ func (h HttpServer) CreateBook(c *gin.Context) {
 		return
 	}
 
+	err = in.Validation()
+	if err != nil {
+		helper.BadRequest(c, err.Error())
+		return
+	}
+
 	// call service
 	res, err := h.app.CreateBook(in)
 	if err != nil {
@@ -60,7 +66,11 @@ func (h HttpServer) GetBookById(c *gin.Context) {
 	// call service
 	res, err := h.app.GetBookById(id)
 	if err != nil {
-		helper.NotFound(c, err.Error())
+		if err.Error() == helper.ErrNotFound {
+			helper.NotFound(c, err.Error())
+			return
+		}
+		helper.InternalServerError(c, err.Error())
 		return
 	}
 
